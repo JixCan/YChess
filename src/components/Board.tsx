@@ -1,79 +1,70 @@
 import React, { useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { Chessground } from 'chessground';
-import './Board.css'; // Ваши стили
+import './Board.css';
 import * as cg from 'chessground/types';
 
 interface BoardProps {
-    fen?: string; // Опциональный пропс для передачи FEN
-    check?: boolean; // Пропс для состояния шаха
-    dests?: cg.Dests | undefined; // Тип для dests
-    destsColor?: cg.Color | 'white'; // Цвет пользователя
-    destsRef?: React.MutableRefObject<cg.Dests | undefined>; // Передаем реф для dests
+    config: {
+        fen?: string;
+        dests?: cg.Dests;
+        userColor?: cg.Color;
+    };
 }
 
-// Определяем интерфейс для методов, доступных через ref
 interface BoardHandle {
     move: (orig: cg.Key, dest: cg.Key) => void;
 }
 
-// Создаем реф для Board с помощью forwardRef
-const Board = forwardRef<BoardHandle, BoardProps>(({ fen = 'start', check = false, dests = undefined, destsColor, destsRef }, ref) => {
+const Board = forwardRef<BoardHandle, BoardProps>(({ config }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const groundRef = useRef<ReturnType<typeof Chessground> | null>(null);
-    const moveSound = new Audio('/move-self.mp3'); // Укажите путь к вашему аудиофайлу
+    const moveSound = useRef(new Audio('/move-self.mp3'));
 
     useImperativeHandle(ref, () => ({
         move: (orig: cg.Key, dest: cg.Key) => {
-            if (groundRef.current) {
-                console.log('Board moving: ${orig} -> ${dest}');
-                groundRef.current.move(orig as any, dest as any); // Выполняем перемещение фигуры
-                moveSound.currentTime = 0; // Сбрасываем время воспроизведения
-                moveSound.play(); // Воспроизводим звук
+            groundRef.current?.move(orig as any, dest as any);
+            if (moveSound.current) {
+                moveSound.current.currentTime = 0;
+                moveSound.current.play();
             }
         },
+        toggle: () => {
+            groundRef.current?.toggleOrientation();
+        }
     }));
 
     useEffect(() => {
         if (containerRef.current) {
-            const config = {
-                fen: fen === 'start' ? 'start' : fen,
-                ranksPosition: 'right',
-                highlight: {
-                    check: true,
-                },
-                orientation: destsColor,
+            groundRef.current = Chessground(containerRef.current, {
+                fen: config.fen === 'start' ? 'start' : config.fen,
+                orientation: config.userColor,
                 movable: {
-                    color: destsColor,
-                    showDests: true,
-                    dests: destsRef?.current, // Используем переданный destsRef
+                    dests: config.dests,
                     free: false,
                     events: {
-                        after: (orig: cg.Key, dest: cg.Key) => {
-                            console.log('Пользователь сделал ход: ${orig} -> ${dest}');
-                        },
+                        after: (orig, dest) => {
+                            console.log(`Пользователь сделал ход: ${orig} -> ${dest}`);
+                            moveSound.current.play();
+                        }
                     },
                 },
-                draggable: {
-                    showGhost: true,
-                },
-            };
-
-            groundRef.current = Chessground(containerRef.current, config);
-            groundRef.current.set({ check });
-            if (destsRef?.current){
-                groundRef.current.set({ movable: { dests: destsRef?.current } }); // Обновляем dests на доске
-                console.log("got dests from useeffect");
-            }
-
-            return () => groundRef.current?.destroy();
+                draggable: { showGhost: true },
+            });
         }
-    }, [fen, check, destsRef?.current]); // Добавьте destsRef.current в зависимости
+        
+        return () => groundRef.current?.destroy();
+    }, [config.fen, config.userColor]);
 
-    return (
-        <div ref={containerRef} className="chessground" style={{ width: '400px', height: '400px' }}>
-            {/* Доска будет инициализирована здесь */}
-        </div>
-    );
+    // Effect to update `dests` whenever it changes
+    useEffect(() => {
+        if (groundRef.current && config.dests) {
+            groundRef.current.set({ movable: { dests: config.dests } });
+            groundRef.current.set({orientation: config.userColor});
+            console.log("Updated dests in Board component:", config.dests, "color: ", config.userColor);
+        }
+    }, [config.dests]);
+
+    return <div ref={containerRef} className="chessground" style={{ width: '400px', height: '400px' }} />;
 });
 
 export default Board;

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Home from './pages/Home';
 import Puzzles from './pages/Puzzles';
-import Profile from './pages/Profile';
+import Profile from './components/Profile';
 import Tracking from './pages/Tracking';
 
 const App: React.FC = () => {
