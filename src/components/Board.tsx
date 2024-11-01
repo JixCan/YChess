@@ -9,16 +9,18 @@ interface BoardProps {
         dests?: cg.Dests;
         userColor?: cg.Color;
     };
+    onFenChange?: (fen: string) => void; // Новое свойство для передачи изменений
 }
 
 interface BoardHandle {
     move: (orig: cg.Key, dest: cg.Key) => void;
 }
 
-const Board = forwardRef<BoardHandle, BoardProps>(({ config }, ref) => {
+const Board = forwardRef<BoardHandle, BoardProps>(({ config, onFenChange: onUserMove }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const groundRef = useRef<ReturnType<typeof Chessground> | null>(null);
     const moveSound = useRef(new Audio('/move-self.mp3'));
+    const latestMove = useRef('');
 
     useImperativeHandle(ref, () => ({
         move: (orig: cg.Key, dest: cg.Key) => {
@@ -30,6 +32,9 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ config }, ref) => {
         },
         toggle: () => {
             groundRef.current?.toggleOrientation();
+        },
+        getLatestMove: () => {
+            return latestMove.current;
         }
     }));
 
@@ -45,6 +50,14 @@ const Board = forwardRef<BoardHandle, BoardProps>(({ config }, ref) => {
                         after: (orig, dest) => {
                             console.log(`Пользователь сделал ход: ${orig} -> ${dest}`);
                             moveSound.current.play();
+                            let userMove = orig + dest;
+                            latestMove.current = userMove;
+
+                            // Вызываем onUserMove, если она передана, после выполнения хода
+                            const newFen = groundRef.current?.getFen();
+                            if (onUserMove && newFen) {
+                                onUserMove(newFen);
+                            }
                         }
                     },
                 },

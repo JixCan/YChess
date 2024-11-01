@@ -6,16 +6,19 @@ import * as cg from 'chessground/types';
 const DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 const Puzzles: React.FC = () => {
-    const boardRef = useRef<{ move: (orig: cg.Key, dest: cg.Key) => void, toggle: () => void }>(null);
+    const boardRef = useRef<{ move: (orig: cg.Key, dest: cg.Key) => void; toggle: () => void; getLatestMove: () => string } | null>(null);
     const gameRef = useRef(new Chess(DEFAULT_FEN));
-    
-    // Consolidate board-related states into one object
+
     const [boardState, setBoardState] = useState({
         fen: DEFAULT_FEN,
         dests: new Map<cg.Key, cg.Key[]>(),
         userColor: '' as cg.Color,
     });
     const [puzzleData, setPuzzleData] = useState(null);
+    
+    // Новые состояния для хранения ходов
+    const [aiMoves, setAiMoves] = useState<string[]>([]);
+    const [userMoves, setUserMoves] = useState<string[]>([]);
 
     const updateDests = () => {
         const dests = new Map<cg.Key, cg.Key[]>();
@@ -29,15 +32,37 @@ const Puzzles: React.FC = () => {
         }));
         console.log("dests updated for fen: ", gameRef.current.fen(), dests);
     };
-    const toggleBoard = () =>{
+
+    const toggleBoard = () => {
         boardRef.current?.toggle();
-    }
+    };
+
+    
+
     const getRandomPuzzle = () => {
         fetch('http://localhost:5000/api/random-puzzle')
             .then((res) => res.json())
             .then((data) => {
                 setPuzzleData(data);
                 gameRef.current = new Chess(data.fen);
+
+                // Разделение moves на aiMoves и userMoves
+                const movesArray = data.moves.split(" ");
+                const newAIMoves = [];
+                const newUserMoves = [];
+
+                for (let i = 0; i < movesArray.length; i++){
+                    if (i % 2 === 0){
+                        newAIMoves.push(movesArray[i])
+                    }else{
+                        newUserMoves.push(movesArray[i]);
+                    }
+                }
+
+                setAiMoves(newAIMoves);
+                setUserMoves(newUserMoves);
+
+                console.log(aiMoves, userMoves);
                 
                 // Update boardState with new puzzle FEN, user color, and initial move
                 const [orig, dest] = [data.moves.slice(0, 2), data.moves.slice(2, 4)];
@@ -51,6 +76,7 @@ const Puzzles: React.FC = () => {
                     boardRef.current?.move(orig as cg.Key, dest as cg.Key);
                     gameRef.current.move({ from: orig, to: dest });
                     updateDests();
+
                 }, 500);
             })
             .catch((error) => console.error('Error fetching puzzle:', error));
@@ -58,10 +84,16 @@ const Puzzles: React.FC = () => {
 
     useEffect(updateDests, [boardState.fen]);
 
+    // Новая функция для обработки изменений fen
+    const handleUserMove = (fen: string) => {
+        console.log("Fen изменен на: ", fen);
+        console.log("Ход пользователя: ", boardRef.current?.getLatestMove());
+    };
+
     return (
         <div>
             <h1>Страница решения шахматных задач</h1>
-            <Board config={boardState} ref={boardRef}/>
+            <Board config={boardState} ref={boardRef} onFenChange={handleUserMove}/>
             <button onClick={getRandomPuzzle}>Получить задачу</button>
             <button onClick={toggleBoard}>Перевернуть доску</button>
             {puzzleData && (
@@ -70,6 +102,13 @@ const Puzzles: React.FC = () => {
                     <pre>{JSON.stringify(puzzleData, null, 2)}</pre>
                 </div>
             )}
+            {/* Выводим aiMoves и userMoves для проверки */}
+            <div>
+                <h2>Ходы компьютера:</h2>
+                <pre>{JSON.stringify(aiMoves, null, 2)}</pre>
+                <h2>Ходы пользователя:</h2>
+                <pre>{JSON.stringify(userMoves, null, 2)}</pre>
+            </div>
         </div>
     );
 };
