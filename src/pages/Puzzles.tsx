@@ -1,116 +1,156 @@
 import React, { useRef, useState, useEffect } from 'react';
-import Board from '../components/Board';
 import { Chess } from 'chess.js';
+import { Chessground } from 'chessground';
 import * as cg from 'chessground/types';
+import { sliceMoveIntoTwo, getAiAndUserMoves } from '../utils/utils';
+import { makeGameMove, getGameTurn, cancelGameMove, getGameFen } from '../utils/gameutils';
+import { cancelBoardMove, getBoardFen, makeBoardMove, setBoardFen, setBoardTurn, toggleBoard, updateBoardDests } from '../utils/boardutils';
+import { PuzzleData } from '../utils/types';
+import { toast, ToastContainer } from 'react-toastify'; // Импортируем toast
+import 'react-toastify/dist/ReactToastify.css'; // Стили для Toastify
+import '../styles/Board.css';
+import '../styles/Puzzles.css';
+
+//TODO: Обработка превращений на 8 горизонтали
+
+
+import { ReactComponent as NextIcon } from '../icons/next.svg';
+import { ReactComponent as FlipIcon } from '../icons/flip.svg';
 
 const DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 const Puzzles: React.FC = () => {
-    const boardRef = useRef<{ move: (orig: cg.Key, dest: cg.Key) => void; toggle: () => void; getLatestMove: () => string } | null>(null);
+    const boardContainerRef = useRef<HTMLDivElement>(null);
     const gameRef = useRef(new Chess(DEFAULT_FEN));
+    const board = useRef<ReturnType<typeof Chessground> | null>(null);
 
-    const [boardState, setBoardState] = useState({
-        fen: DEFAULT_FEN,
-        dests: new Map<cg.Key, cg.Key[]>(),
-        userColor: '' as cg.Color,
-    });
-    const [puzzleData, setPuzzleData] = useState(null);
-    
-    // Новые состояния для хранения ходов
-    const [aiMoves, setAiMoves] = useState<string[]>([]);
-    const [userMoves, setUserMoves] = useState<string[]>([]);
+    const puzzleSolved = useRef(false);
 
-    const updateDests = () => {
-        const dests = new Map<cg.Key, cg.Key[]>();
-        gameRef.current.moves({ verbose: true }).forEach(({ from, to }) => {
-            if (!dests.has(from)) dests.set(from, []);
-            dests.get(from)!.push(to);
-        });
-        setBoardState(prevState => ({
-            ...prevState,
-            dests,
-        }));
-        console.log("dests updated for fen: ", gameRef.current.fen(), dests);
-    };
+    // Используем useRef для хранения массивов ходов, чтобы избежать перерисовок
+    const aiMovesRef = useRef<string[]>([]);
+    const userMovesRef = useRef<string[]>([]);
 
-    const toggleBoard = () => {
-        boardRef.current?.toggle();
-    };
+    const [puzzleData, setPuzzleData] = useState<PuzzleData | undefined>();
 
-    
-
-    const getRandomPuzzle = () => {
-        fetch('http://localhost:5000/api/random-puzzle')
-            .then((res) => res.json())
-            .then((data) => {
+    const getPuzzle = () => {
+        const request = new XMLHttpRequest();
+        request.open('GET', 'http://localhost:5000/api/random-puzzle');
+        request.onload = () => {
+            try {
+                const data = JSON.parse(request.response);
                 setPuzzleData(data);
-                gameRef.current = new Chess(data.fen);
-
-                // Разделение moves на aiMoves и userMoves
-                const movesArray = data.moves.split(" ");
-                const newAIMoves = [];
-                const newUserMoves = [];
-
-                for (let i = 0; i < movesArray.length; i++){
-                    if (i % 2 === 0){
-                        newAIMoves.push(movesArray[i])
-                    }else{
-                        newUserMoves.push(movesArray[i]);
-                    }
-                }
-
-                setAiMoves(newAIMoves);
-                setUserMoves(newUserMoves);
-
-                console.log(aiMoves, userMoves);
-                
-                // Update boardState with new puzzle FEN, user color, and initial move
-                const [orig, dest] = [data.moves.slice(0, 2), data.moves.slice(2, 4)];
-                setBoardState({
-                    fen: data.fen,
-                    dests: new Map(),
-                    userColor: data.fen.split(' ')[1] === 'w' ? 'black' : 'white',
-                });
-                
-                setTimeout(() => {
-                    boardRef.current?.move(orig as cg.Key, dest as cg.Key);
-                    gameRef.current.move({ from: orig, to: dest });
-                    updateDests();
-
-                }, 500);
-            })
-            .catch((error) => console.error('Error fetching puzzle:', error));
+                console.log(data);
+            } catch (error) {
+                console.error('Ошибка при разборе JSON:', error);
+            }
+        };
+        request.send();
     };
 
-    useEffect(updateDests, [boardState.fen]);
-
-    // Новая функция для обработки изменений fen
-    const handleUserMove = (fen: string) => {
-        console.log("Fen изменен на: ", fen);
-        console.log("Ход пользователя: ", boardRef.current?.getLatestMove());
+    const makeNextAiMove = (aiMoves: string[]) => {
+        if (!puzzleSolved.current && board.current && userMovesRef.current.length > 0) {
+            console.log(aiMoves);
+            const [orig, dest] = sliceMoveIntoTwo(aiMoves[0]);
+            console.log(`AI is trying to move: ${orig} to ${dest}`);
+            makeGameMove(gameRef, orig, dest);
+            const remainingMoves = aiMoves.slice(1);
+            aiMovesRef.current = remainingMoves; // Обновляем ссылку на массив
+            setTimeout(() => {
+                makeBoardMove(board.current!, orig as cg.Key, dest as cg.Key);
+                updateBoardDests(board.current!, gameRef);
+            }, 500);
+        } else {
+            console.log("Puzzle solved!");
+        }
     };
+
+    const loadPuzzleOnBoard = (puzzleData: PuzzleData | undefined) => {
+        if (!puzzleData || !board.current) return;
+
+        puzzleSolved.current = false;
+
+        gameRef.current = new Chess(puzzleData.fen);
+        const [newAIMoves, newUserMoves] = getAiAndUserMoves(puzzleData.moves.split(" "));
+        aiMovesRef.current = newAIMoves;  // Сохраняем новые ходы AI
+        userMovesRef.current = newUserMoves; // Сохраняем новые ходы пользователя
+
+        board.current.set({ fen: puzzleData.fen });
+        const userOrientation = getGameTurn(gameRef) === 'w' ? 'black' : 'white';
+        board.current.set({ orientation: userOrientation });
+
+        makeNextAiMove(newAIMoves);
+    };
+
+    const handleuserMove = (move: string) => {
+        console.log(move, userMovesRef.current);
+        if (userMovesRef.current.includes(move)) {
+            console.log('User move is correct!');
+            userMovesRef.current = userMovesRef.current.slice(1); // Обновляем массив
+            if (userMovesRef.current.length === 0) {
+                puzzleSolved.current = true;
+                console.log("Puzzle solved!");
+                toast.success("Задача решена!");
+            }
+            makeNextAiMove(aiMovesRef.current);
+        } else {
+            cancelGameMove(gameRef);
+            cancelBoardMove(board.current!);
+            updateBoardDests(board.current!, gameRef);
+            setBoardFen(board.current!, getGameFen(gameRef));
+            console.log("User move is incorrect!");
+            toast.error("Неверный ход!");
+        }
+    };
+
+    useEffect(() => {
+        if (puzzleData) {
+            // Загружаем новый пазл
+            loadPuzzleOnBoard(puzzleData);
+        }
+    }, [puzzleData]); // Следим за изменением puzzleData
+
+    useEffect(() => {
+        if (boardContainerRef.current) {
+            board.current = Chessground(boardContainerRef.current, {
+                fen: DEFAULT_FEN,
+                orientation: 'white',
+                movable: {
+                    free: false,
+                    events: {
+                        after: (orig, dest) => {
+                            const move = orig + dest;
+                            makeGameMove(gameRef, orig, dest);
+                            handleuserMove(move);
+                        },
+                    },
+                },
+                draggable: { showGhost: true },
+            });
+        }
+
+        return () => board.current?.destroy();
+    }, []);
 
     return (
         <div>
             <h1>Страница решения шахматных задач</h1>
-            <Board config={boardState} ref={boardRef} onFenChange={handleUserMove}/>
-            <button onClick={getRandomPuzzle}>Получить задачу</button>
-            <button onClick={toggleBoard}>Перевернуть доску</button>
-            {puzzleData && (
-                <div>
-                    <h2>Данные о задаче:</h2>
-                    <pre>{JSON.stringify(puzzleData, null, 2)}</pre>
+            <div className='board-container'>
+                <div ref={boardContainerRef} style={{ width: '500px', height: '500px' }}></div>
+                <div className="button-container">
+                <button onClick={getPuzzle}>
+                        <NextIcon style={{ width: '24px', height: '24px', marginRight: '8px' }} />
+                        Новая задача
+                    </button>
+                    <button onClick={() => toggleBoard(board.current!)}>
+                        <FlipIcon style={{ width: '24px', height: '24px', marginRight: '8px' }} />
+                        Перевернуть доску
+                    </button>
                 </div>
-            )}
-            {/* Выводим aiMoves и userMoves для проверки */}
-            <div>
-                <h2>Ходы компьютера:</h2>
-                <pre>{JSON.stringify(aiMoves, null, 2)}</pre>
-                <h2>Ходы пользователя:</h2>
-                <pre>{JSON.stringify(userMoves, null, 2)}</pre>
             </div>
+            <ToastContainer />
         </div>
     );
+    
 };
 
 export default Puzzles;

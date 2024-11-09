@@ -1,0 +1,48 @@
+:root {
+  /* Цветовые переменные */
+  --bg-color: rgb(34, 34, 34);
+  --color1: #634f5f;
+  --color2: #a46877;
+  --color3: #e08976;
+  --color4: #ffba6a;
+  --color5: #f9f871;
+  --sidebar-color: #333;
+
+  /* Шрифтовые и размерные переменные */
+  --sidebar-width: 19rem; /* 250px */
+  --padding-main: 1.25rem;    /* 20px */
+  --padding-item: 0.625rem 0.9375rem; /* 10px 15px */
+  --font-size-main: 1rem;     /* 16px */
+  --font-size-logo: 1.5rem;   /* 24px */
+  --border-radius: 0.5rem;    /* 8px */
+}
+
+@font-face {
+  font-family: 'Nunito';
+  src: url('../fonts/Nunito.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* App.css */
+.app {
+  display: flex;
+  height: 100vh; /* Высота на весь экран */
+}
+
+.content {
+  flex: 1; /* Занимает всё доступное пространство справа от sidebar */
+  padding: 1.25rem; /* Внутренние отступы для контента */
+  overflow-y: auto; /* Позволяет прокручивать контент, если он выходит за пределы видимой области */
+}
+
+body {
+  margin: 0;
+  font-family: 'Nunito', Arial, sans-serif;
+  color: antiquewhite;
+  /* background-color: var(--bg-color); */
+  background-color: #242925;
+  background-image: url('../images/wood-pattern.png');
+  background-repeat: repeat; /* Повторение изображения по обеим осям */
+  background-size: auto; /* или 'cover' если хочешь растянуть на весь экран */
+}

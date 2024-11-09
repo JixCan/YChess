@@ -1,0 +1,31 @@
+
+
+.board-container {
+    display: flex;
+    flex-direction: column; /* Элементы будут располагаться вертикально (доска сверху, кнопки снизу) */
+    align-items: center;     /* Центрируем по горизонтали */
+    justify-content: center;
+    border: 2px dotted;
+}
+
+.button-container {
+    display: flex;
+    gap: 10px; /* Промежуток между кнопками */
+    margin-top: 20px; /* Добавим отступ сверху для кнопок */
+}
+
+button {
+    display: flex; /* Используем flexbox для выравнивания иконки и текста */
+    align-items: center; /* Выравниваем иконку по вертикали */
+    padding: var(--padding-item);
+    background-color: var(--color1);
+    color: var(--color4);
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-size: var(--font-size-main);
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+    box-sizing: border-box; /* Учитываем padding в ширине */
+    text-align: left; /* Сдвигаем текст влево для выравнивания с иконкой */
+    font-family: 'Nunito', Arial, sans-serif;
+}

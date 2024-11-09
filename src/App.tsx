@@ -1,10 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
+import Sidebar from './pages/Sidebar';
 import Home from './pages/Home';
 import Puzzles from './pages/Puzzles';
-import Profile from './components/Profile';
-import Tracking from './pages/Tracking';
+import Stats from './pages/Stats';
+import Cabinet from './pages/Cabinet';
+import PGNViewer from './pages/PGNViewer';
+import './styles/App.css'; // Импорт стилей для компонента App
+import Auth from './pages/Auth';
+
 
 const App: React.FC = () => {
   return (
@@ -15,8 +19,10 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/puzzles" element={<Puzzles />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/tracking" element={<Tracking />} />
+            <Route path="/stats" element={<Stats />} />
+            <Route path="/cabinet" element={<Cabinet />} />
+            <Route path="/pgn" element={<PGNViewer/>} />
+            <Route path='/auth' element={<Auth/>} />
           </Routes>
         </div>
       </div>
