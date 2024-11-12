@@ -16,6 +16,7 @@ import '../styles/Puzzles.css';
 
 import { ReactComponent as NextIcon } from '../icons/next.svg';
 import { ReactComponent as FlipIcon } from '../icons/flip.svg';
+import AppButton from './AppButton';
 
 const DEFAULT_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -137,14 +138,14 @@ const Puzzles: React.FC = () => {
             <div className='board-container'>
                 <div ref={boardContainerRef} style={{ width: '500px', height: '500px' }}></div>
                 <div className="button-container">
-                <button onClick={getPuzzle}>
+                <AppButton onClick={getPuzzle}>
                         <NextIcon style={{ width: '24px', height: '24px', marginRight: '8px' }} />
                         Новая задача
-                    </button>
-                    <button onClick={() => toggleBoard(board.current!)}>
+                    </AppButton>
+                    <AppButton onClick={() => toggleBoard(board.current!)}>
                         <FlipIcon style={{ width: '24px', height: '24px', marginRight: '8px' }} />
                         Перевернуть доску
-                    </button>
+                    </AppButton>
                 </div>
             </div>
             <ToastContainer />

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import LichessPgnViewer from 'lichess-pgn-viewer';
 import '../styles/pgnviewer.scss';
+import AppButton from './AppButton';
 //TODO: сделать динамическое обновление при загрузке pgn
 const PGNViewer: React.FC = () => {
     const viewerRef = useRef<HTMLDivElement | null>(null);
@@ -66,9 +67,9 @@ const PGNViewer: React.FC = () => {
                 rows={4}
                 style={{ width: '100%', marginBottom: '0.5rem', padding: '0.5rem' }}
             ></textarea>
-            <button onClick={initializeViewer} style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}>
+            <AppButton onClick={initializeViewer} style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}>
                 Загрузить PGN
-            </button>
+            </AppButton>
         </div>
     );
 };

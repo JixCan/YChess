@@ -1,12 +1,11 @@
 :root {
-  /* Цветовые переменные */
-  --bg-color: rgb(34, 34, 34);
-  --color1: #634f5f;
-  --color2: #a46877;
-  --color3: #e08976;
-  --color4: #ffba6a;
-  --color5: #f9f871;
-  --sidebar-color: #333;
+  --main-color: #CADABF;
+  --bg-second-color: #c1d2b6;
+  --secondary-color: #B5CFB7;
+  --elements-color: #7e5f4a;
+  --elements-text-color: #E7E8D8;
+  --elements-text-hover-color: #a6a87c;
+  --main-text-color: #362a15;
 
   /* Шрифтовые и размерные переменные */
   --sidebar-width: 19rem; /* 250px */
@@ -15,6 +14,16 @@
   --font-size-main: 1rem;     /* 16px */
   --font-size-logo: 1.5rem;   /* 24px */
   --border-radius: 0.5rem;    /* 8px */
+}
+
+.dark-theme{
+  --main-color: #697565;
+  --bg-second-color: #636f5f;
+  --secondary-color: #3C3D37;
+  --elements-color: #181C14;
+  --elements-text-color: #ECDFCC;
+  --elements-text-hover-color: #7e6949;
+  --main-text-color: #ddffea;
 }
 
 @font-face {
@@ -27,11 +36,12 @@
 /* App.css */
 .app {
   display: flex;
-  height: 100vh; /* Высота на весь экран */
+  height: 100vh;
+  flex-direction: column;
 }
 
 .content {
-  flex: 1; /* Занимает всё доступное пространство справа от sidebar */
+  flex: 1; 
   padding: 1.25rem; /* Внутренние отступы для контента */
   overflow-y: auto; /* Позволяет прокручивать контент, если он выходит за пределы видимой области */
 }
@@ -39,10 +49,23 @@
 body {
   margin: 0;
   font-family: 'Nunito', Arial, sans-serif;
-  color: antiquewhite;
-  /* background-color: var(--bg-color); */
-  background-color: #242925;
-  background-image: url('../images/wood-pattern.png');
-  background-repeat: repeat; /* Повторение изображения по обеим осям */
-  background-size: auto; /* или 'cover' если хочешь растянуть на весь экран */
+  /* background-color: var(--main-color); */
+  background: repeating-linear-gradient(135deg, var(--main-color), var(--main-color) 20px, var(--bg-second-color) 20px, var(--bg-second-color) 40px);
+  color: var(--main-text-color);
+}
+
+button {
+  display: flex; /* Используем flexbox для выравнивания иконки и текста */
+  align-items: center; /* Выравниваем иконку по вертикали */
+  padding: var(--padding-item);
+  background-color: var(--elements-color);
+  color: var(--elements-text-color);
+  text-decoration: none;
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-main);
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+  box-sizing: border-box; /* Учитываем padding в ширине */
+  text-align: center;
+  font-family: 'Nunito', Arial, sans-serif;
 }

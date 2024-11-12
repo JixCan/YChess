@@ -1,0 +1,59 @@
+/* TopMenu.css */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.top-menu {
+  background-color: var(--elements-color);
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Центрируем элементы */
+  padding: var(--padding-main);
+  height: var(--header-height);
+  width: 100%;
+  font-family: 'Nunito', Arial, sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Лого располагается слева */
+.logo {
+  font-size: var(--font-size-logo);
+  font-weight: bold;
+  color: var(--elements-text-color);
+  position: absolute; /* Фиксируем логотип в начале */
+  left: var(--padding-main); /* Отступ слева */
+}
+
+/* Центрируем ссылки и переключатель темы */
+.center-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* Стили для меню-ссылок */
+.menu-links {
+  list-style-type: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+.menu-links li a {
+  color: var(--elements-text-color);
+  text-decoration: none;
+  font-size: var(--font-size-main);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.menu-links li a:hover {
+  color: var(--elements-text-hover-color);
+  font-weight: bold;
+}

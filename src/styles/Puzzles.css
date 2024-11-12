@@ -14,18 +14,6 @@
     margin-top: 20px; /* Добавим отступ сверху для кнопок */
 }
 
-button {
-    display: flex; /* Используем flexbox для выравнивания иконки и текста */
-    align-items: center; /* Выравниваем иконку по вертикали */
-    padding: var(--padding-item);
-    background-color: var(--color1);
-    color: var(--color4);
-    text-decoration: none;
-    border-radius: var(--border-radius);
-    font-size: var(--font-size-main);
-    font-weight: 500;
-    transition: background-color 0.3s, color 0.3s;
-    box-sizing: border-box; /* Учитываем padding в ширине */
-    text-align: left; /* Сдвигаем текст влево для выравнивания с иконкой */
-    font-family: 'Nunito', Arial, sans-serif;
+button{
+    text-align: left;
 }

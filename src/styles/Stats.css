@@ -1,17 +1,64 @@
-input{
-    padding: 6px 12px;
-    background: rgb(31, 32, 35);
-    border: 1px solid rgb(60, 63, 68);
-    border-radius: 4px;
-    font-size: 13px;
-    color: rgb(247, 248, 248);
-    height: 46px;
-    appearance: none;
-    transition: border 0.15s ease 0s;
+/* Stats.css */
+.chart-container {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto; /* Центровка */
+  position: relative;
 }
 
-input:focus{
-    outline: none;
-    box-shadow: none;
-    border-color: rgb(100, 153, 255);
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
+
+input{
+  border-radius: 5px;
+  background: var(--secondary-color);
+  border: 1px solid var(--elements-color);
+  font-size: 16px;
+  height: 40px;
+  line-height: 24px;
+  padding: 7px 8px;
+  color: var(--main-text-color);
+  box-shadow: none;
+  :focus{
+      background-color: var(--secondary-color);
+      border-color: var(--elements-color);
+      box-shadow: 1px 1px 0 var(--elements-color);
+  }
+  
+}
+
+/* Стили для select */
+select {
+  border-radius: 5px;
+  background: var(--secondary-color);
+  border: 1px solid var(--elements-color);
+  font-size: 16px;
+  height: 40px;
+  line-height: 24px;
+  padding: 7px 8px;
+  color: var(--main-text-color);
+  box-shadow: none;
+}
+
+select:focus {
+  background-color: var(--secondary-color);
+  border-color: var(--elements-color);
+  box-shadow: 1px 1px 0 var(--elements-color);
+}
+
+/* Стили для option */
+option {
+  background-color: var(--secondary-color);
+  color: var(--main-text-color);
+  font-size: 16px;
+}
+
+/* Модификации для активного состояния (при выборе) */
+select:active, select:focus {
+  background-color: var(--secondary-color);
+  border-color: var(--elements-color);
+  box-shadow: 1px 1px 0 var(--elements-color);
+}
+
