@@ -26,9 +26,6 @@ const TopMenu: React.FC = () => {
           <li>
             <Link to="/pgn">Анализ партии</Link>
           </li>
-          <li>
-            <Link to="/auth">Войти</Link>
-          </li>
         </ul>
         <ThemeToggle /> {/* Переключатель темы */}
       </div>

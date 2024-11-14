@@ -2,8 +2,8 @@
 @import '../../node_modules/lichess-pgn-viewer/scss/lichess-pgn-viewer.lib';
 
 .pgn-viewer {
-    max-width: 800px;   /* Ограничиваем максимальную ширину */
+    max-width: 700px;   /* Ограничиваем максимальную ширину */
     margin: 0 auto;     /* Центрируем по горизонтали */
-    overflow: hidden;   /* Обрезаем лишнее содержимое */
+    
   }
   

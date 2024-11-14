@@ -50,3 +50,17 @@ export const getGameTurn = (game: React.MutableRefObject<Chess>): Color => {
     return game.current.turn();
 }
 
+/**
+ * Метод для расчёта рейтинга Эло
+ *
+ * @param {number} currentRating
+ * @param {number} puzzleRating
+ * @param {boolean} isSolved
+ * @returns {number}
+ */
+export const calculateElo = (currentRating: number, puzzleRating: number, isSolved: boolean): number => {
+    const K = 32; // коэффициент для корректировки рейтинга
+    const expectedScore = 1 / (1 + Math.pow(10, (puzzleRating - currentRating) / 400));
+    const score = isSolved ? 1 : 0;
+    return Math.round(currentRating + K * (score - expectedScore));
+};

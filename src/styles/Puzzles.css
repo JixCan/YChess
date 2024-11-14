@@ -1,19 +1,47 @@
+.puzzle-container{
+    display: flex;
+    align-items: center;
+    justify-self: center;
+}
 
+.board-and-rating {
+    display: flex;
+    gap: 20px; /* Расстояние между двумя столбцами */
+    justify-content: center;
+    align-items: center;
+    border: 2px dotted blue;
+    width: fit-content;
+}
 
 .board-container {
-    display: flex;
-    flex-direction: column; /* Элементы будут располагаться вертикально (доска сверху, кнопки снизу) */
-    align-items: center;     /* Центрируем по горизонтали */
-    justify-content: center;
-    border: 2px dotted;
+    border: 2px dotted green;
+    flex: 1;
+    padding: 1rem;
 }
 
-.button-container {
+.rating-and-buttons-container{
     display: flex;
-    gap: 10px; /* Промежуток между кнопками */
-    margin-top: 20px; /* Добавим отступ сверху для кнопок */
+    flex-direction: column; /* Вертикальное расположение контейнеров */
+    flex: 1; /* Второй столбец будет в два раза шире первого */
+    gap: 20px; /* Расстояние между верхним и нижним контейнерами */
+    border: 2px dotted yellow;
 }
 
-button{
-    text-align: left;
+.rating-container {
+    border: 2px dotted red;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    flex: 1;
 }
+
+.buttons-container{
+    display: flex;
+    gap: 10px; /* Расстояние между горизонтальными контейнерами */
+    flex: 1;
+}
+
+.app-button {
+    flex: 1;
+}
+
