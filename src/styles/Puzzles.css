@@ -1,7 +1,7 @@
 .puzzle-container{
     display: flex;
     align-items: center;
-    justify-self: center;
+    justify-content: center;
 }
 
 .board-and-rating {
@@ -9,39 +9,73 @@
     gap: 20px; /* Расстояние между двумя столбцами */
     justify-content: center;
     align-items: center;
-    border: 2px dotted blue;
+    /* border: 2px dotted blue; */
     width: fit-content;
 }
 
 .board-container {
-    border: 2px dotted green;
+    /* border: 2px dotted green; */
     flex: 1;
     padding: 1rem;
 }
 
 .rating-and-buttons-container{
     display: flex;
+    align-items: center;
     flex-direction: column; /* Вертикальное расположение контейнеров */
     flex: 1; /* Второй столбец будет в два раза шире первого */
     gap: 20px; /* Расстояние между верхним и нижним контейнерами */
-    border: 2px dotted yellow;
+    /* border: 2px dotted yellow; */
+    
 }
 
 .rating-container {
-    border: 2px dotted red;
+    /* border: 2px dotted red; */
     font-size: 18px;
     font-weight: bold;
     text-align: center;
     flex: 1;
+    max-width: 400px;
 }
 
 .buttons-container{
     display: flex;
+    flex-direction: column;
     gap: 10px; /* Расстояние между горизонтальными контейнерами */
     flex: 1;
 }
 
-.app-button {
-    flex: 1;
+.control-buttons{
+    display: flex;
+    flex-direction: row;
+    /* border: 2px dotted brown; */
+    gap: 10px; /* Расстояние между горизонтальными контейнерами */
 }
 
+.hint-buttons{
+    display: flex;
+    flex-direction: row;
+    /* border: 2px dotted brown; */
+    gap: 10px; /* Расстояние между горизонтальными контейнерами */
+    /* border: 2px dotted coral; */
+}
+
+.app-button {
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon{
+    width: 24px;
+    height: 24px;
+    margin: 8px;
+}
+
+.icon path{
+    fill: var(--elements-text-color);
+}
+
+button:hover{
+    color: var(--elements-text-hover-color);
+}

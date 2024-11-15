@@ -129,6 +129,35 @@ app.get('/api/user-rating/:userId', async (req, res) => {
   }
 });
 
+app.get('/api/chesscom/puzzles/:username', async (req, res) => {
+  const { username } = req.params;
+  const url = `https://www.chess.com/callback/member/stats/${username}`;
+
+  try {
+      const response = await fetch(url);
+      if (!response.ok) {
+          return res.status(404).json({ error: 'User not found or request failed' });
+      }
+
+      const data = await response.json();
+      const tacticsData = data.stats.find((stat) => stat.key === 'tactics');
+
+      if (!tacticsData) {
+          return res.status(404).json({ error: 'No puzzle data found for this user' });
+      }
+
+      const puzzleStats = {
+          games: tacticsData.gameCount || 0,
+          rating: tacticsData.stats.rating || 0,
+      };
+
+      res.json(puzzleStats);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'An error occurred while fetching data' });
+  }
+});
+
 
 // Запуск сервера
 app.listen(PORT, () => {

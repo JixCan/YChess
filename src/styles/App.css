@@ -6,6 +6,7 @@
   --elements-text-color: #E7E8D8;
   --elements-text-hover-color: #a6a87c;
   --main-text-color: #362a15;
+  --board-color: #a7bc9a;
 
   /* Шрифтовые и размерные переменные */
   --sidebar-width: 19rem; /* 250px */
@@ -24,6 +25,7 @@
   --elements-text-color: #ECDFCC;
   --elements-text-hover-color: #7e6949;
   --main-text-color: #ddffea;
+  --board-color: #90a682;
 }
 
 @font-face {

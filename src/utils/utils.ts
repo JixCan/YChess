@@ -29,6 +29,9 @@ export const sliceMoveIntoTwo = (move: string): [string, string] => {
     return [move.slice(0, 2), move.slice(2, 4)];
 }
 
+export const getLichessAnalysisLink = (fen: string, color: string): string => {
+    return "https://lichess.org/analysis/" + fen.replaceAll(" ", "_") + "?color=" + color;
+}
 
 
 

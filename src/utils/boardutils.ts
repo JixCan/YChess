@@ -104,3 +104,7 @@ export const setBoardTurn = (board: Api, turn: Color) => {
     board.set({movable: {color: turn}});
 }
 
+export const selectSquare = (board: Api, key: Key) => {
+    board.selectSquare(key);
+}
+

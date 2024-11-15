@@ -1,17 +1,92 @@
 /* Stats.css */
-.chart-container {
+.main{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.input-fields {
+  display: flex;
+  align-items: flex-start; /* Выравнивание по верхнему краю */
+  gap: 20px; /* Расстояние между колонками */
+  margin-bottom: 20px;
+}
+
+.radio-buttons {
+  display: flex;
+  flex-direction: column; /* Радиокнопки в колонку */
+}
+
+.rb {
+  display: flex;
+  align-items: center; /* Выравнивание лейблов и радиокнопок */
+  gap: 5px; /* Расстояние между радио и текстом */
+}
+
+.inputs-and-button{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inputs{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.get-data-button{
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wdl-charts-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  gap: 30px;
+  /* Расстояние между графиками */
+}
+
+.ratings-and-wdl-container{
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: row;
+  gap: 20px;
+  
+}
+.rating-chart-container,
+.wdl-chart-container {
   width: 300px;
   height: 300px;
-  margin: 0 auto; /* Центровка */
+  margin: 0 auto;
+  /* Центровка */
   position: relative;
 }
 
-.chart-container canvas {
+.wdl-chart-container canvas {
   width: 100% !important;
   height: 100% !important;
 }
 
-input{
+.chart-container {
+  background-color: var(--elements-color);
+  border-radius: 10px;
+  width: fit-content;
+  text-align: center;
+  color: var(--elements-text-color);
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+
+input {
   border-radius: 5px;
   background: var(--secondary-color);
   border: 1px solid var(--elements-color);
@@ -21,12 +96,13 @@ input{
   padding: 7px 8px;
   color: var(--main-text-color);
   box-shadow: none;
-  :focus{
-      background-color: var(--secondary-color);
-      border-color: var(--elements-color);
-      box-shadow: 1px 1px 0 var(--elements-color);
+
+  :focus {
+    background-color: var(--secondary-color);
+    border-color: var(--elements-color);
+    box-shadow: 1px 1px 0 var(--elements-color);
   }
-  
+
 }
 
 /* Стили для select */
@@ -56,9 +132,9 @@ option {
 }
 
 /* Модификации для активного состояния (при выборе) */
-select:active, select:focus {
+select:active,
+select:focus {
   background-color: var(--secondary-color);
   border-color: var(--elements-color);
   box-shadow: 1px 1px 0 var(--elements-color);
 }
-
