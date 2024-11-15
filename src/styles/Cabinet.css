@@ -1,0 +1,49 @@
+.info-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.info-panel {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.cab-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.login-panel {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--elements-color);
+    width: 500px;
+    border-radius: 15px;
+}
+
+.inputs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+}
+
+.login-buttons-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+input{
+    width: 100%;
+}

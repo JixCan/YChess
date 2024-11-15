@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import axios from 'axios';
+import '../styles/RatingCharts.css'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -11,6 +12,7 @@ import {
   Tooltip,
   Legend,
   Filler,
+  scales,
 } from 'chart.js';
 
 ChartJS.register(
@@ -36,6 +38,8 @@ interface RatingChartsProps {
 const RatingCharts: React.FC<RatingChartsProps> = ({ onUpdateRating }) => {
   const [ratings, setRatings] = useState<RatingData[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  const elementsTextColor = window.getComputedStyle(document.documentElement).getPropertyValue('--elements-text-color').trim();
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
@@ -67,23 +71,52 @@ const RatingCharts: React.FC<RatingChartsProps> = ({ onUpdateRating }) => {
     labels: ratings.map((data) => new Date(data.timestamp).toLocaleDateString()),
     datasets: [
       {
-        label: 'Rating',
+        label: 'Рейтинг',
         data: ratings.map((data) => data.rating),
-        borderColor: 'rgba(75,192,192,1)',
-        backgroundColor: 'rgba(75,192,192,0.2)',
-        fill: true,
+        borderColor: elementsTextColor,
+        backgroundColor: elementsTextColor,
+        fill: false,
       },
     ],
   };
 
   return (
-    <div>
-      <h2>User Rating History</h2>
+    <div className='rating-chart-container'>
+      <h2>История изменения вашего рейтинга:</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {ratings.length > 0 ? (
-        <Line data={chartData} options={{ responsive: true, plugins: { legend: { display: true } } }} />
+       <Line
+       data={chartData}
+       options={{
+         responsive: true,
+         plugins: {
+           legend: {
+             display: true,
+             labels: {
+               color: elementsTextColor, // Окрашиваем текст легенды
+             },
+           },
+         },
+         scales: {
+           x: {
+             ticks: {
+               color: elementsTextColor, // Цвет текста меток
+               maxTicksLimit: 5, // Ограничиваем количество меток
+               
+             },
+           },
+           y: {
+             ticks: {
+               color: elementsTextColor, // Цвет текста вдоль оси Y
+             },
+           },
+         },
+       }}
+     />
+     
+
       ) : (
-        <p>No rating data available.</p>
+        <p>Информации нет или она недоступна.</p>
       )}
     </div>
   );

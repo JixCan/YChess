@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import RatingCharts from './RatingCharts';
+import '../styles/Cabinet.css'
+import AppButton from './AppButton';
 
 interface User {
   id: number;
@@ -22,6 +24,10 @@ const Cabinet: React.FC = () => {
   }, []);
 
   const handleRegister = async () => {
+    if (!username || !password) {
+      setError('Пожалуйста, заполните все поля.');
+      return;
+    }
     try {
       const response = await axios.post('http://localhost:5000/api/register', { username, password });
       setUser(response.data.user);
@@ -29,11 +35,15 @@ const Cabinet: React.FC = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       setError(null);
     } catch (err) {
-      setError('Username already exists');
+      setError('Пользователь с таким никнеймом уже существует!');
     }
   };
 
   const handleLogin = async () => {
+    if (!username || !password) {
+      setError('Пожалуйста, заполните все поля.');
+      return;
+    }
     try {
       const response = await axios.post('http://localhost:5000/api/login', { username, password });
       setUser(response.data.user);
@@ -41,7 +51,7 @@ const Cabinet: React.FC = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       setError(null);
     } catch (err) {
-      setError('Invalid username or password');
+      setError('Неверный никнейм или пароль!');
     }
   };
 
@@ -60,34 +70,43 @@ const Cabinet: React.FC = () => {
 
   if (user) {
     return (
-      <div>
-        <h2>Welcome, {user.username}!</h2>
-        <p>Rating: {user.rating}</p>
-        <button onClick={handleLogout}>Logout</button>
-        {/* Передаем updateUserRating в RatingCharts */}
-        <RatingCharts  onUpdateRating={updateUserRating} />
+      <div className='info-container'>
+        <div className="info-panel">
+          <h2>Добро пожаловать, {user.username}!</h2>
+          <p>Ваш рейтинг: {user.rating}</p>
+          <AppButton className='cab-button' onClick={handleLogout}>Выйти</AppButton>
+        </div>
+        <RatingCharts onUpdateRating={updateUserRating} />
       </div>
     );
   }
 
   return (
-    <div>
-      <h2>Register or Login</h2>
+    <div className='login-container'>
+      <h2>Чтобы сохранять статистику изменения вашего рейтинга, зарегистрируйтесь или войдите в свой аккаунт.</h2>
+      <div className="login-panel">
+        <div className="inputs-container">
+          <input
+            type="text"
+            placeholder="Никнейм"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+      </div>
+      <div className="login-buttons-container">
+        <AppButton className='cab-button' onClick={handleLogin}>Войти</AppButton>
+        <AppButton className='cab-button' onClick={handleRegister}>Зарегистрироваться</AppButton>
+      </div>
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleRegister}>Register</button>
-      <button onClick={handleLogin}>Login</button>
     </div>
   );
 };

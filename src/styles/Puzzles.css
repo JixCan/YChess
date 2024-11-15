@@ -42,22 +42,14 @@
     display: flex;
     flex-direction: column;
     gap: 10px; /* Расстояние между горизонтальными контейнерами */
-    flex: 1;
 }
 
-.control-buttons{
+.control-buttons,
+.hint-buttons {
     display: flex;
-    flex-direction: row;
-    /* border: 2px dotted brown; */
-    gap: 10px; /* Расстояние между горизонтальными контейнерами */
-}
-
-.hint-buttons{
-    display: flex;
-    flex-direction: row;
-    /* border: 2px dotted brown; */
-    gap: 10px; /* Расстояние между горизонтальными контейнерами */
-    /* border: 2px dotted coral; */
+    flex-direction: row; /* Кнопки внутри размещаются горизонтально */
+    gap: 10px; /* Расстояние между кнопками */
+    justify-content: center; /* Центровка внутри каждого ряда */
 }
 
 .app-button {

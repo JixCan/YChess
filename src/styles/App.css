@@ -17,6 +17,16 @@
   --border-radius: 0.5rem;    /* 8px */
 }
 
+html {
+  overflow: hidden;
+  height: 100%;
+}
+
+body {
+  overflow: auto;
+  height: 100%;
+}
+
 .dark-theme{
   --main-color: #697565;
   --bg-second-color: #636f5f;

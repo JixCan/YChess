@@ -1,6 +1,6 @@
 import { Chess } from "chess.js";
 import { Api } from "chessground/api";
-import { Color, Key } from "chessground/types";
+import { Color, Key, Piece } from "chessground/types";
 
 
 // board: Api
@@ -108,3 +108,6 @@ export const selectSquare = (board: Api, key: Key) => {
     board.selectSquare(key);
 }
 
+export const newPiece = (board: Api, piece: Piece, key: Key) => {
+    board.newPiece(piece, key);
+}
