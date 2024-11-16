@@ -2,8 +2,33 @@
 @import '../../node_modules/lichess-pgn-viewer/scss/lichess-pgn-viewer.lib';
 
 .pgn-viewer {
-    max-width: 700px;   /* Ограничиваем максимальную ширину */
+    max-height: 800px;   /* Ограничиваем максимальную ширину */
     margin: 0 auto;     /* Центрируем по горизонтали */
-    
-  }
-  
+}
+
+.lpv__side{
+    max-height: 800px;
+    max-width: 500px;
+}
+
+
+.lpv{
+    width: fit-content;
+}
+
+.lpv-main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.lpv-board-and-controls{
+    display: flex;
+    flex-direction: row;
+}
+
+.lpv-controls{
+    display: flex;
+    flex-direction: column;
+}
