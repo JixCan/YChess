@@ -36,6 +36,7 @@ const Stats: React.FC = () => {
 
     const handleFetchData = async () => {
         try {
+            setError(null);
             let ratingsResponse;
             let modeStatsResponse;
             let puzzleResponse;
@@ -188,7 +189,7 @@ const Stats: React.FC = () => {
                 <div className="ratings-and-wdl-container">
                     <div className="chart-container">
                         <h3>Рейтинги по режимам</h3>
-                        <div className="rating-chart-container">
+                        <div className="stat-rating-chart-container">
                             {ratingsBarChartData && (
                                 <Bar data={ratingsBarChartData.data} options={ratingsBarChartData.options} />
                             )}

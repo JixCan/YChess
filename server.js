@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { Pool } = require('pg');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const { spawn } = require('child_process'); // Импорт для запуска внешних процессов
 
 dotenv.config();
 
@@ -27,6 +28,8 @@ const pool = new Pool({
 });
 
 const JWT_SECRET = 'sHSGUDSKDHWu7267*D'
+
+
 
 // Маршрут для случайной задачи
 app.get('/api/random-puzzle', async (req, res) => {

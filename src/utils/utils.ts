@@ -33,5 +33,8 @@ export const getLichessAnalysisLink = (fen: string, color: string): string => {
     return "https://lichess.org/analysis/" + fen.replaceAll(" ", "_") + "?color=" + color;
 }
 
-
+export const extractGameId = (url: string): string | null => {
+    const match = url.match(/lichess\.org\/([a-zA-Z0-9]{8})/); 
+    return match ? match[1] : null;
+};
 
