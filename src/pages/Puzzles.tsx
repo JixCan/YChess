@@ -46,7 +46,7 @@ const Puzzles: React.FC = () => {
                 const data = JSON.parse(request.response);
                 //setPuzzleData(data);
                 puzzleData.current = data;
-                console.log("from getpuzzle: puzzleData.current = ", puzzleData.current);
+
                 if (puzzleData.current) {
                 loadPuzzleOnBoard(puzzleData.current);
                 }
@@ -77,7 +77,7 @@ const Puzzles: React.FC = () => {
                 setUserRating(1200);
             }
         } else {
-            console.log("No user found in local storage!");
+
         }
     };
 
@@ -109,8 +109,7 @@ const Puzzles: React.FC = () => {
     };
 
     const loadPuzzleOnBoard = (puzzleData: PuzzleData | undefined) => {
-        console.log("from loadPuzzle: puzzledata = ", puzzleData);
-        console.log("useridref.current = ", userIdRef.current);
+
         if (!puzzleData || !board.current) return;
         
         puzzleSolved.current = false;
@@ -142,23 +141,23 @@ const Puzzles: React.FC = () => {
     }
 
     const handleuserMove = (move: string) => {
-        console.log(move, userMovesRef.current);
+
         if (userMovesRef.current[0] === move) {
-            console.log('User move is correct!');
+
             userMovesRef.current = userMovesRef.current.slice(1); 
             userColor.current = getGameTurn(gameRef) === 'w' ? 'white' : 'black';
             puzzleFen.current = getGameFen(gameRef);
             if (userMovesRef.current.length === 0) {
                 puzzleSolved.current = true;
-                console.log("Puzzle solved!");
+
                 toast.success("Задача решена!");
                 if (puzzleData.current && puzzleSolved.current) {
                     const initialRating = userRatingRef.current !== null ? userRatingRef.current : 1200;
                     const newRating = calculateElo(initialRating, puzzleData.current.rating, true);
-                    console.log('New rating:', newRating);
+
                     updateRating(newRating); // Обновление рейтинга после решения задачи
                 } else {
-                    console.log("puzzledata is ", puzzleData);
+
                 }
             }
             makeNextAiMove(aiMovesRef.current);
@@ -173,7 +172,7 @@ const Puzzles: React.FC = () => {
 
     useEffect(() => {
         getUserRating(); 
-        console.log("from useEffect: puzzleData.current = ", puzzleData.current);
+
         // if (puzzleData.current) {
         //     loadPuzzleOnBoard(puzzleData.current);
         // }

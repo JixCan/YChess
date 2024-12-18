@@ -23,9 +23,9 @@ const TopMenu: React.FC = () => {
           <li>
             <Link to="/cabinet">Личный кабинет</Link>
           </li>
-          {/* <li>
+          <li>
             <Link to="/pgn">Анализ партии</Link>
-          </li> */}
+          </li>
         </ul>
         <ThemeToggle /> {/* Переключатель темы */}
       </div>

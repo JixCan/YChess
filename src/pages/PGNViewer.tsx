@@ -30,18 +30,17 @@ const PGNViewer: React.FC = () => {
                 lichess: 'https://lichess.org',
             });
 
-            console.log(viewer.current);
         }
     }
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        console.log('Изменение текста PGN:', e.target.value);
+
         setPgnText(e.target.value); // Обновляем состояние PGN
     };
 
     const loadPgn = () => {
-        console.log('Загрузка нового PGN...');
+
         initViewer(pgnText); // Передаем текущий PGN
     };
 
